@@ -1,0 +1,107 @@
+"""Configuración de TodoTrabajo.
+
+Todo lo sensible o dependiente del entorno se lee desde variables de entorno
+(ver .env.example).
+"""
+import os
+from pathlib import Path
+
+import dj_database_url
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+
+def env_bool(nombre, defecto=False):
+    return os.environ.get(nombre, str(defecto)).lower() in ("1", "true", "yes", "si")
+
+
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "dev-inseguro-cambiar-en-produccion")
+DEBUG = env_bool("DJANGO_DEBUG", True)
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
+CSRF_TRUSTED_ORIGINS = [
+    o for o in os.environ.get("DJANGO_CSRF_TRUSTED_ORIGINS", "").split(",") if o
+]
+
+INSTALLED_APPS = [
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
+    "django.contrib.humanize",
+    # Terceros
+    "django_htmx",
+    # Propias
+    "apps.cuentas",
+    "apps.ubicaciones",
+    "apps.publicaciones",
+    "apps.chat",
+]
+
+MIDDLEWARE = [
+    "django.middleware.security.SecurityMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "django_htmx.middleware.HtmxMiddleware",
+]
+
+ROOT_URLCONF = "config.urls"
+
+TEMPLATES = [
+    {
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [BASE_DIR / "templates"],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
+            ],
+        },
+    },
+]
+
+WSGI_APPLICATION = "config.wsgi.application"
+
+# Base de datos: Postgres vía DATABASE_URL; SQLite como respaldo para pruebas rápidas.
+DATABASES = {
+    "default": dj_database_url.config(
+        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
+        conn_max_age=600,
+    )
+}
+
+AUTH_USER_MODEL = "cuentas.Usuario"
+
+AUTH_PASSWORD_VALIDATORS = [
+    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
+    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
+    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
+    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
+]
+
+LOGIN_URL = "admin:login"  # Se reemplaza en el Sprint 2 por nuestras vistas
+LOGIN_REDIRECT_URL = "inicio"
+LOGOUT_REDIRECT_URL = "inicio"
+
+LANGUAGE_CODE = "es-cl"
+TIME_ZONE = "America/Santiago"
+USE_I18N = True
+USE_TZ = True
+USE_THOUSAND_SEPARATOR = True
+
+STATIC_URL = "static/"
+STATICFILES_DIRS = [BASE_DIR / "static"]
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
+MEDIA_URL = "media/"
+MEDIA_ROOT = BASE_DIR / "media"
+
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"

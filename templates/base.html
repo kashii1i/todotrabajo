@@ -1,0 +1,38 @@
+{% load static %}<!DOCTYPE html>
+<html lang="es-CL">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block titulo %}TodoTrabajo{% endblock %}</title>
+  {# MVP: Tailwind y HTMX por CDN. En el Sprint 5 los compilamos/servimos localmente. #}
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col" hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+  <header class="bg-white border-b">
+    <nav class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+      <a href="{% url 'inicio' %}" class="text-xl font-bold text-emerald-700">TodoTrabajo</a>
+      <div class="flex items-center gap-4 text-sm">
+        {% if user.is_authenticated %}
+          <span>Hola, {{ user }}</span>
+        {% else %}
+          <a href="{% url 'admin:login' %}" class="hover:underline">Ingresar</a>
+        {% endif %}
+      </div>
+    </nav>
+  </header>
+
+  <main class="flex-1 max-w-6xl w-full mx-auto px-4 py-8">
+    {% if messages %}
+      <div class="mb-6 space-y-2">
+        {% for m in messages %}<div class="rounded bg-emerald-100 px-4 py-2">{{ m }}</div>{% endfor %}
+      </div>
+    {% endif %}
+    {% block contenido %}{% endblock %}
+  </main>
+
+  <footer class="border-t bg-white text-center text-sm text-slate-500 py-6">
+    TodoTrabajo · Servicios y encargos en todo Chile
+  </footer>
+</body>
+</html>
