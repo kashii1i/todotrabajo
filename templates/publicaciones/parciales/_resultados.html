@@ -1,0 +1,27 @@
+<p class="text-sm text-slate-500 mb-4">
+  {{ pagina.paginator.count }} publicaci{{ pagina.paginator.count|pluralize:"ón,ones" }}
+</p>
+
+<div class="grid sm:grid-cols-2 gap-4">
+  {% for p in pagina %}
+    {% include "publicaciones/parciales/_tarjeta.html" %}
+  {% empty %}
+    <p class="text-slate-500 col-span-full">No encontramos publicaciones con esos filtros. Prueba ampliando la búsqueda.</p>
+  {% endfor %}
+</div>
+
+{% if pagina.has_other_pages %}
+  <nav class="flex items-center justify-center gap-4 mt-8 text-sm" hx-target="#resultados" hx-push-url="true">
+    {% if pagina.has_previous %}
+      <a href="?{{ parametros }}{% if parametros %}&{% endif %}page={{ pagina.previous_page_number }}"
+         hx-get="?{{ parametros }}{% if parametros %}&{% endif %}page={{ pagina.previous_page_number }}"
+         class="rounded border bg-white px-3 py-1.5 hover:bg-slate-100">← Anterior</a>
+    {% endif %}
+    <span>Página {{ pagina.number }} de {{ pagina.paginator.num_pages }}</span>
+    {% if pagina.has_next %}
+      <a href="?{{ parametros }}{% if parametros %}&{% endif %}page={{ pagina.next_page_number }}"
+         hx-get="?{{ parametros }}{% if parametros %}&{% endif %}page={{ pagina.next_page_number }}"
+         class="rounded border bg-white px-3 py-1.5 hover:bg-slate-100">Siguiente →</a>
+    {% endif %}
+  </nav>
+{% endif %}

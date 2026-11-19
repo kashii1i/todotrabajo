@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block titulo %}Explorar publicaciones · TodoTrabajo{% endblock %}
+
+{% block contenido %}
+<h1 class="text-3xl font-bold mb-6">Explorar publicaciones</h1>
+
+<div class="grid md:grid-cols-[260px_1fr] gap-8">
+  {# Filtros: cada cambio pide solo los resultados (HTMX) y actualiza la URL para poder compartirla. #}
+  <form method="get" action="{% url 'publicaciones:listado' %}"
+        class="bg-white rounded-lg border p-4 space-y-4 h-fit"
+        hx-get="{% url 'publicaciones:listado' %}"
+        hx-target="#resultados"
+        hx-trigger="change, keyup changed delay:400ms from:#{{ form.q.auto_id }}"
+        hx-push-url="true">
+    {% for campo in form %}
+      <div>
+        <label for="{{ campo.auto_id }}" class="block text-sm font-medium mb-1">{{ campo.label }}</label>
+        {{ campo }}
+      </div>
+    {% endfor %}
+    <noscript><button type="submit" class="w-full rounded bg-emerald-600 text-white py-2">Filtrar</button></noscript>
+    <a href="{% url 'publicaciones:listado' %}" class="block text-center text-sm text-slate-500 hover:underline">Limpiar filtros</a>
+  </form>
+
+  <div id="resultados">
+    {% include "publicaciones/parciales/_resultados.html" %}
+  </div>
+</div>
+
+<style>
+  /* Estilo común para los campos del filtro (Tailwind CDN no permite @apply) */
+  form input[type=text], form select { width: 100%; border: 1px solid #cbd5e1; border-radius: .375rem; padding: .5rem; background: #fff; }
+</style>
+{% endblock %}

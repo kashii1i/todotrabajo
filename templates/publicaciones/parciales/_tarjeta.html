@@ -1,0 +1,16 @@
+{% load formato %}
+{# Tarjeta de una publicación. Espera la variable `p`. #}
+<article class="bg-white rounded-lg border p-4 flex flex-col gap-1">
+  <span class="text-xs uppercase font-semibold {% if p.tipo == 'oferta' %}text-emerald-700{% else %}text-amber-700{% endif %}">
+    {{ p.get_tipo_display }}
+  </span>
+  {# TODO (tu parte): cuando exista la vista de detalle, envuelve el título en <a href="{% url 'publicaciones:detalle' p.pk %}"> #}
+  <h3 class="font-semibold text-lg leading-snug">{{ p.titulo }}</h3>
+  <p class="text-sm text-slate-600 line-clamp-2">{{ p.descripcion }}</p>
+  <p class="text-sm text-slate-500 mt-auto pt-2">
+    {{ p.categoria.nombre }} · {{ p.comuna }}, {{ p.comuna.region }}
+  </p>
+  <p class="text-sm font-medium">
+    {% if p.modalidad_precio == "convenir" %}A convenir{% else %}{{ p.precio|clp }}{% if p.modalidad_precio == "hora" %} / hora{% endif %}{% endif %}
+  </p>
+</article>

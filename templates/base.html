@@ -13,6 +13,7 @@
     <nav class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
       <a href="{% url 'inicio' %}" class="text-xl font-bold text-emerald-700">TodoTrabajo</a>
       <div class="flex items-center gap-4 text-sm">
+        <a href="{% url 'publicaciones:listado' %}" class="hover:underline">Explorar</a>
         {% if user.is_authenticated %}
           <span>Hola, {{ user.first_name|default:user.email }}</span>
           <a href="{% url 'perfil' %}" class="hover:underline">Mi perfil</a>
