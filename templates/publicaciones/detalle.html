@@ -38,7 +38,9 @@
 
       <div>
         <span class="text-sm text-slate-500">Precio</span>
-        <p class="font-medium">{{ publicacion.precio|clp }}</p>
+        <p class="font-medium">
+            {% if publicacion.modalidad_precio == "convenir" %}A convenir{% else %}{{ publicacion.precio|clp }}{% if publicacion.modalidad_precio == "hora" %} / hora{% endif %}{% endif %}
+        </p>
       </div>
 
       <div>
