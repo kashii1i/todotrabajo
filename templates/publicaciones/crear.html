@@ -1,0 +1,69 @@
+
+{% extends "base.html" %}
+
+{% block titulo %}Crear publicación · TodoTrabajo{% endblock %}
+
+{% block contenido %}
+<div class="max-w-2xl mx-auto">
+  <a href="{% url 'publicaciones:listado' %}" class="text-sm text-emerald-700 hover:underline">
+    ← Volver a publicaciones
+  </a>
+
+  <div class="bg-white rounded-lg border p-6 mt-4">
+    <h1 class="text-2xl font-bold mb-2">Crear publicación</h1>
+    <p class="text-slate-500 mb-6">Completa los datos para publicar tu servicio o encargo.</p>
+
+    <form method="post" class="space-y-5">
+      {% csrf_token %}
+
+      {% for campo in form %}
+        <div>
+          <label for="{{ campo.id_for_label }}" class="block text-sm font-medium mb-1">
+            {{ campo.label }}
+          </label>
+
+          {{ campo }}
+
+          {% if campo.help_text %}
+            <p class="text-xs text-slate-500 mt-1">{{ campo.help_text }}</p>
+          {% endif %}
+
+          {% for error in campo.errors %}
+            <p class="text-sm text-red-600 mt-1">{{ error }}</p>
+          {% endfor %}
+        </div>
+      {% endfor %}
+
+      {% if form.non_field_errors %}
+        <div class="text-sm text-red-600">
+          {{ form.non_field_errors }}
+        </div>
+      {% endif %}
+
+      <div class="flex gap-3 pt-2">
+        <button type="submit"
+                class="rounded bg-emerald-600 text-white px-5 py-2 hover:bg-emerald-700">
+          Publicar
+        </button>
+
+        <a href="{% url 'publicaciones:listado' %}"
+           class="rounded border px-5 py-2 hover:bg-slate-50">
+          Cancelar
+        </a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<style>
+  form input:not([type=checkbox]):not([type=radio]),
+  form select,
+  form textarea {
+    width: 100%;
+    border: 1px solid #cbd5e1;
+    border-radius: .375rem;
+    padding: .625rem;
+    background: white;
+  }
+</style>
+{% endblock %}

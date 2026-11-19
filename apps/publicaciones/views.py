@@ -5,6 +5,13 @@ from django.shortcuts import render
 from .forms import FiltroPublicacionesForm
 from .models import Categoria, Publicacion
 
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from .forms import PublicacionForm
+
+from django.shortcuts import get_object_or_404
+from django.http import Http404
+
 POR_PAGINA = 12
 
 
@@ -53,3 +60,29 @@ def listado(request):
     contexto = {"form": form, "pagina": pagina, "parametros": parametros.urlencode()}
     plantilla = "publicaciones/parciales/_resultados.html" if request.htmx else "publicaciones/listado.html"
     return render(request, plantilla, contexto)
+
+
+@login_required
+def crear(request):
+    if request.method == "POST":
+        form = PublicacionForm(request.POST)
+
+        if form.is_valid():
+            form.instance.autor = request.user
+            publicacion = form.save()
+            return redirect("publicaciones:detalle", pk=publicacion.pk)
+
+    else:
+        form = PublicacionForm()
+
+    return render(request, "publicaciones/crear.html", {"form": form})
+
+def detalle(request, pk):
+    publicacion = get_object_or_404(Publicacion, pk=pk)
+    
+    if publicacion.estado != Publicacion.Estado.ACTIVA and publicacion.autor != request.user:
+        raise Http404
+
+    contexto = {"publicacion": publicacion}
+
+    return render(request, "publicaciones/detalle.html", contexto)
