@@ -1,9 +1,10 @@
-from django.shortcuts import render, redirect 
+from django.shortcuts import render, redirect
 from django.contrib.auth import login
+from django.contrib.auth.decorators import login_required
+
 from .forms import RegistroForm, PerfilForm
 from .models import Usuario, Perfil
 
-from django.contrib.auth.decorators import login_required
 
 def registro(request):
     if request.method == "POST":
@@ -37,3 +38,5 @@ def perfil(request):
         form = PerfilForm(instance=request.user.perfil)
 
     return render(request, "cuentas/perfil.html", {"form": form})
+
+
