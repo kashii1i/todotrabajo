@@ -87,9 +87,9 @@ AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
-LOGIN_URL = "admin:login"  # Se reemplaza en el Sprint 2 por nuestras vistas
+LOGIN_URL = "login"  # Se reemplaza en el Sprint 2 por nuestras vistas
 LOGIN_REDIRECT_URL = "inicio"
-LOGOUT_REDIRECT_URL = "inicio"
+LOGOUT_REDIRECT_URL = "login"
 
 LANGUAGE_CODE = "es-cl"
 TIME_ZONE = "America/Santiago"

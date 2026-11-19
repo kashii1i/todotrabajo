@@ -14,9 +14,15 @@
       <a href="{% url 'inicio' %}" class="text-xl font-bold text-emerald-700">TodoTrabajo</a>
       <div class="flex items-center gap-4 text-sm">
         {% if user.is_authenticated %}
-          <span>Hola, {{ user }}</span>
+          <span>Hola, {{ user.first_name|default:user.email }}</span>
+          <a href="{% url 'perfil' %}" class="hover:underline">Mi perfil</a>
+          <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit" class="hover:underline">Salir</button>
+          </form>
         {% else %}
-          <a href="{% url 'admin:login' %}" class="hover:underline">Ingresar</a>
+          <a href="{% url 'login' %}" class="hover:underline">Ingresar</a>
+          <a href="{% url 'registro' %}" class="rounded bg-emerald-600 text-white px-3 py-1.5 hover:bg-emerald-700">Registrarse</a>
         {% endif %}
       </div>
     </nav>
