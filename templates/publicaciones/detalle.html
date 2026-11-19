@@ -1,5 +1,5 @@
-
 {% extends "base.html" %}
+{% load formato %}
 
 {% block titulo %}{{ publicacion.titulo }} · TodoTrabajo{% endblock %}
 
@@ -20,12 +20,25 @@
           {{ publicacion.categoria }}
         </p>
       </div>
+
+      {% if user == publicacion.autor %}
+        <button type="button"
+                class="rounded bg-emerald-600 text-white px-4 py-2">
+          Editar
+        </button>
+      {% endif %}
     </div>
 
     <div class="border-y py-5 my-5 space-y-3">
+
       <div>
         <span class="text-sm text-slate-500">Tipo de publicación</span>
         <p class="font-medium">{{ publicacion.get_tipo_display }}</p>
+      </div>
+
+      <div>
+        <span class="text-sm text-slate-500">Precio</span>
+        <p class="font-medium">{{ publicacion.precio|clp }}</p>
       </div>
 
       <div>
@@ -38,9 +51,17 @@
       <div>
         <span class="text-sm text-slate-500">Publicado por</span>
         <p class="font-medium">
-          {{ publicacion.autor.first_name|default:publicacion.autor.email }}
+          {{ publicacion.autor.first_name|default:"Usuario de TodoTrabajo" }}
         </p>
       </div>
+
+      <div>
+        <span class="text-sm text-slate-500">Fecha de publicación</span>
+        <p class="font-medium">
+            {{ publicacion.creado|date:"d/m/Y H:i" }}
+         </p>
+    </div>
+
     </div>
 
     <h2 class="text-xl font-semibold mb-3">Descripción</h2>

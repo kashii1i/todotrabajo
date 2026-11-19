@@ -5,7 +5,12 @@
     {{ p.get_tipo_display }}
   </span>
   {# TODO (tu parte): cuando exista la vista de detalle, envuelve el título en <a href="{% url 'publicaciones:detalle' p.pk %}"> #}
-  <h3 class="font-semibold text-lg leading-snug">{{ p.titulo }}</h3>
+  <h3 class="font-semibold text-lg leading-snug">
+    <a href="{% url 'publicaciones:detalle' p.pk %}"
+      class="hover:text-emerald-700 hover:underline">
+      {{ p.titulo }}
+    </a>
+  </h3>
   <p class="text-sm text-slate-600 line-clamp-2">{{ p.descripcion }}</p>
   <p class="text-sm text-slate-500 mt-auto pt-2">
     {{ p.categoria.nombre }} · {{ p.comuna }}, {{ p.comuna.region }}
